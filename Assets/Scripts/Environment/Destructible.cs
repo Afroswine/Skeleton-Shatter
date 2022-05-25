@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class Destructible : MonoBehaviour, IDamageable
 {
+    [Header("Broken Variant")]
     [SerializeField, Tooltip("The broken variant of this object.")]
     private Rubble _rubble;
     [SerializeField, Tooltip("The time (seconds) before this object stops being interactive.")]
     private float _activeDuration = 5f;
+
 
     public virtual void ApplyDamage(int amount, Vector3 point)
     {

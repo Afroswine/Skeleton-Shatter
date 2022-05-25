@@ -179,7 +179,7 @@ MonoBehaviour:
   _shootDistance: 60
   _weaponDamage: 25
   _roundsPerSecond: 4.5
-  _maxAngleOfInaccuracy: 0.02
+  _maxAngleOfInaccuracy: 0
   _knockbackMultiplier: 3
   _explosionForce: 150
   _explosionRadius: 6
