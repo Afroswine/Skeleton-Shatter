@@ -8,6 +8,7 @@ public static class Stats
 {
     public static MassPresets Mass { get; }
     public static ForcePresets Force { get; }
+    public static FontPresets Font { get; }
 
     public class MassPresets    // Presets for an object's mass
     {
@@ -20,5 +21,19 @@ public static class Stats
         public readonly float Light = 40f;
         public readonly float Medium = 80f;
         public readonly float Heavy = 120f;
+    }
+    public class FontPresets    // Presets for fonts
+    {
+        /*
+        private readonly Font normalSource = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
+        public Font normal
+        {
+            get
+            {
+                Font clonedFont = (Font)Object.Instantiate(normalSource);
+                return clonedFont;
+            }
+        }
+        */
     }
 }

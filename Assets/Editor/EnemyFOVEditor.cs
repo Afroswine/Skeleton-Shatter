@@ -10,23 +10,17 @@ public class EnemyFOVEditor : FieldOfViewEditor
         
         EnemyFOV enemyFOV;
         enemyFOV = target as EnemyFOV;
-        Vector3 enemyFOVOrigin = enemyFOV.PursuitOrigin;
+        Vector3 enemyFOVOrigin = enemyFOV.PursuitOrigin != default ? enemyFOV.PursuitOrigin : enemyFOV.transform.position;
 
-        if (enemyFOVOrigin != new Vector3(0, 0, 0))
-        {
-            Handles.color = Color.cyan;
-            Handles.DrawWireArc(enemyFOVOrigin, Vector3.up, Vector3.forward, 360, enemyFOV.MaxPursuitRadius);
+        // Draw Pursuit Radius
+        Handles.color = Color.blue ;
+        Handles.DrawWireArc(enemyFOVOrigin, Vector3.up, Vector3.forward, 360, enemyFOV.MaxPursuitRadius);
 
-            if (enemyFOV.InPursuit && !FOV.CanSeeTarget)
-            {
-                Handles.color = Color.green;
-                Handles.DrawLine(FOVOrigin.position, FOV.Target.transform.position);
-            }
-        }
-        else if (enemyFOV != null)
+        // Draw Pursuit Indicator
+        if (enemyFOV.InPursuit && !FOV.CanSeeTarget)
         {
-            Handles.color = Color.cyan;
-            Handles.DrawWireArc(enemyFOV.transform.position, Vector3.up, Vector3.forward, 360, enemyFOV.MaxPursuitRadius);
+            Handles.color = Color.green;
+            Handles.DrawLine(FOVOrigin.position, FOV.Target.transform.position);
         }
     }
 }

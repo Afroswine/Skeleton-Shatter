@@ -6,20 +6,6 @@ using UnityEngine.Events;
 // For GUI, see the 'FieldOfViewEditor' script
 public class FieldOfView : MonoBehaviour
 {
-    [Header("Field of View")]
-    [SerializeField, Tooltip("The origin of the view. Use the head or eyes.")]
-    private Transform _viewOrigin;
-    public Transform ViewOrigin => _viewOrigin;
-    [SerializeField, Tooltip("(float) The range of vision.")]
-    private float _radius = 5f;
-    public float Radius => _radius;
-    [SerializeField, Range(0, 360), Tooltip("(float) The angle of vision.")]
-    private float _angle = 90f;
-    public float Angle => _angle;
-    [Tooltip("Time (seconds) inbetween FOV checks.")]
-    private float _checkDelay = 0.2f;
-    public float CheckDelay => _checkDelay;
-
     [Header("Target Information")]
     [SerializeField, Tooltip("React to GameObjects with this tag.")]
     private string _targetTag = "Player";
@@ -34,33 +20,48 @@ public class FieldOfView : MonoBehaviour
     private LayerMask _obstructionMask;
     public LayerMask ObstructionMask => _obstructionMask;
 
-    // If target is within FOV, and the view is unobstructed, this is true.
+    [Header("Field of View")]
+    [SerializeField, Tooltip("The origin of the view. Use the head or eyes.")]
+    private Transform _viewOrigin;
+    public Transform ViewOrigin => _viewOrigin;
+    [SerializeField, Tooltip("The range of vision.")]
+    private float _radius = 5f;
+    public float Radius => _radius;
+    protected float _currentRadius;
+    public float CurrentRadius => _currentRadius;
+    [SerializeField, Range(0, 360), Tooltip("The angle of vision.")]
+    private float _angle = 90f;
+    public float Angle => _angle;
+    protected float _currentAngle;
+    public float CurrentAngle => _currentAngle;
+    [Tooltip("Time (seconds) inbetween FOV checks.")]
+    private float _checkDelay = 0.2f;
+    public float CheckDelay => _checkDelay;
+
     private bool _canSeeTarget;
     public bool CanSeeTarget => _canSeeTarget;
 
     [HideInInspector]
-    public UnityEvent TargetSpottedEvent;   // Invoked when the target is initially spotted/re-spotted
+    public UnityEvent TargetSpottedEvent;
 
     private void Start()
     {
-        // Debugging
-        if(_viewOrigin == null)
-        {
-            _viewOrigin = gameObject.transform;
-            Debug.Log(gameObject.name + "'s \"FieldOfView()._viewOrigin\" has not been set.");
-        }
-        if (_targetMask == 0)
-        {
-            Debug.Log(gameObject.name + "'s \"FieldOfView()._targetMask\" has not been set.");
-        }
-        if (_obstructionMask == 0)
-        {
-            Debug.Log(gameObject.name + "'s \"FieldOfView()._obstructionMask\" has not been set.");
-        }
-
+        ResetFOV();
         // Begin searching for target
         _target = GameObject.FindGameObjectWithTag(_targetTag);
         StartCoroutine(FOVRoutine());
+    }
+
+    protected void SetFOV(float radius, float angle)
+    {
+        _currentRadius = radius;
+        _currentAngle = angle;
+    }
+
+    protected void ResetFOV()
+    {
+        _currentRadius = _radius;
+        _currentAngle = _angle;
     }
 
     private IEnumerator FOVRoutine()
@@ -77,7 +78,7 @@ public class FieldOfView : MonoBehaviour
     private void FieldOfViewCheck()
     {
         // Finds all objects within the OverlapSphere that are within the _targetMask layer(s).
-        Collider[] rangeChecks = Physics.OverlapSphere(_viewOrigin.position, _radius, _targetMask);
+        Collider[] rangeChecks = Physics.OverlapSphere(_viewOrigin.position, _currentRadius, _targetMask);
 
         // Only uses the first object in the array. THIS MIGHT NEED TO BE CHANGED.
         if (rangeChecks.Length != 0)
@@ -86,7 +87,7 @@ public class FieldOfView : MonoBehaviour
             Vector3 directionToTarget = (target.position - _viewOrigin.position).normalized;  // .normalize caps the vector's length
 
             // If target is within the viewing angle
-            if (Vector3.Angle(_viewOrigin.forward, directionToTarget) < _angle / 2)
+            if (Vector3.Angle(_viewOrigin.forward, directionToTarget) < _currentAngle / 2)
             {
                 float distanceToTarget = Vector3.Distance(_viewOrigin.position, target.position);
 

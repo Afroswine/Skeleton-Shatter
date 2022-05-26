@@ -1430,6 +1430,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c17b89e43e6b28f4eada2a01740afc12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _randomizeOnAwake: 1
   _clips:
   - {fileID: 8300000, guid: daf3874f73368ce4b92934f006a95971, type: 3}
   - {fileID: 8300000, guid: 0c5b14eb2c1561d4ea08f628b75dd472, type: 3}
@@ -1446,7 +1447,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.083
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0

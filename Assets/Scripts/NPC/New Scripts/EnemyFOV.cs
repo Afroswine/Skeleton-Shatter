@@ -5,7 +5,13 @@ using UnityEngine.Events;
 
 public class EnemyFOV : FieldOfView
 {
-    [Header("Pursuit")]
+    [Header("Pursuit Field of View")]
+    [SerializeField, Tooltip("The range of vision while in pursuit.")]
+    private float _pursuitRadius = 5f;
+    [SerializeField, Range(0, 360), Tooltip("The angle of vision while in pursuit.")]
+    private float _pursuitAngle = 100f;
+
+    [Header("Pursuit End Conditions")]
     [SerializeField, Tooltip("If a target leaves this range, immediately stop pursuing them.")]
     private float _maxPursuitRadius = 10f;
     public float MaxPursuitRadius => _maxPursuitRadius;
@@ -27,7 +33,7 @@ public class EnemyFOV : FieldOfView
     private void Awake()
     {
         _pursuitOrigin = gameObject.transform.position;
-        _maxPursuitRadius = Mathf.Max(_maxPursuitRadius, Radius);
+        _maxPursuitRadius = Mathf.Max(_maxPursuitRadius, CurrentRadius);
     }
 
     private void OnEnable()
@@ -53,14 +59,18 @@ public class EnemyFOV : FieldOfView
         WaitForSeconds wait = new(CheckDelay);
         _inPursuit = true;
         BeginPursuitEvent.Invoke();
+        SetFOV(_pursuitRadius, _pursuitAngle);
 
         while (_inPursuit)
         {
+            
             yield return wait;
             PursuitCheck();
         }
 
+        ResetFOV();
         EndPursuitEvent.Invoke();
+
     }
 
     private void PursuitCheck()
