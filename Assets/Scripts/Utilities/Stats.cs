@@ -4,12 +4,13 @@ using UnityEngine;
 using UnityEditor;
 
 // Grants access to various stat presets
-public static class Stats
+public class Stats
 {
-    public static MassPresets Mass { get; }
-    public static ForcePresets Force { get; }
-    public static FontPresets Font { get; }
-
+    public static MassPresets Mass { get; private set; }
+    public static ForcePresets Force { get; private set; }
+    public static FontPresets Font { get; private set; }
+    public static GravityPresets Gravity { get; }
+    
     public class MassPresets    // Presets for an object's mass
     {
         public readonly float Light = 0.3f;
@@ -21,6 +22,13 @@ public static class Stats
         public readonly float Light = 40f;
         public readonly float Medium = 80f;
         public readonly float Heavy = 120f;
+    }
+    public class GravityPresets
+    {
+        [Tooltip("Gravity used by the player. DO NOT TOUCH OUTSIDE OF PlayerMovement !!!")]
+        public float PlayerGrav = 6f;
+        [Tooltip("MaxFall used by the player. DO NOT TOUCH OUTSIDE OF PlayerMovement !!!")]
+        public float PlayerMaxFall = 35f;
     }
     public class FontPresets    // Presets for fonts
     {

@@ -127,7 +127,7 @@ public class FireWeapon : MonoBehaviour
     void NewFireFX()
     {
         float destroyTimer = 0f;
-        _currentFireFX = Instantiate(_fireFX, _barrelLocator.position, _barrelLocator.rotation);
+        _currentFireFX = Instantiate(_fireFX, _barrelLocator.position, _barrelLocator.rotation, DynamicSingleton.Instance.transform);
 
         if(_currentFireFX.TryGetComponent<AudioSource>(out AudioSource audioSource))
         {
@@ -157,6 +157,7 @@ public class FireWeapon : MonoBehaviour
         _currentHitFX = Instantiate(hitFX);
         _currentHitFX.transform.position = _objectHit.point;
         _currentHitFX.transform.forward = _objectHit.normal;
+        _currentHitFX.transform.SetParent(DynamicSingleton.Instance.transform);
         Color colorRemap = Color.magenta;
 
         if (_currentHitFX.TryGetComponent<AudioSource>(out AudioSource audioSource))
